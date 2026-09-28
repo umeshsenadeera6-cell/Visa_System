@@ -51,7 +51,7 @@ export default function Requirements() {
     <div>
       <PageHeader title="Requirements" subtitle="Define the document checklist generated for each country and visa type." />
 
-      <Card className="mb-5 p-4">
+      <Card className="mb-5 p-4 animate-fade-up">
         <div className="grid gap-3 sm:grid-cols-[220px_1fr_auto] sm:items-end">
           <div className="space-y-1.5">
             <Label>Country</Label>
@@ -102,14 +102,14 @@ export default function Requirements() {
           <EmptyState icon={ClipboardList} title="Select a visa type" description="Choose a country and visa type to manage its requirements." />
         </Card>
       ) : (
-        <div className="grid gap-4 xl:grid-cols-3">
+        <div className="grid gap-4 xl:grid-cols-3 animate-fade-up stagger-1">
           <SectionCard className="xl:col-span-2" title="Required Documents" description={`${vt.name} · ${reqs.length} items`} icon={<ClipboardList />}>
             {reqs.length === 0 ? (
               <EmptyState compact icon={ClipboardList} title="No requirements yet" description="Add the first document below." />
             ) : (
               <ul className="space-y-2">
                 {reqs.map((r, i) => (
-                  <li key={r.id} className="group flex flex-col gap-2 rounded-xl border border-border bg-card p-3 transition hover:border-[#cfe0d7] sm:flex-row sm:items-center">
+                  <li key={r.id} className="group flex flex-col gap-2 rounded-xl border border-border bg-card p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs hover:border-primary/30 sm:flex-row sm:items-center">
                     <div className="flex min-w-0 flex-1 items-center gap-2">
                       <GripVertical className="size-4 shrink-0 text-muted-foreground/50" />
                       <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-[11px] font-semibold tabular">{i + 1}</span>

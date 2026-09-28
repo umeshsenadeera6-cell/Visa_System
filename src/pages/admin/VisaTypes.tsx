@@ -94,7 +94,7 @@ export default function VisaTypes() {
         title="Visa Types"
         subtitle={`${store.visaTypes.length} visa products across ${store.countries.length} countries`}
         actions={
-          <Button onClick={() => modals.open("visaType")}>
+          <Button onClick={() => modals.open("visaType")} className="shimmer-sweep">
             <Plus /> Add Visa Type
           </Button>
         }
@@ -102,7 +102,7 @@ export default function VisaTypes() {
       {loading ? (
         <TableSkeleton />
       ) : (
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden animate-fade-up">
           <Toolbar activeCount={(q ? 1 : 0) + [country, cat, status].filter((x) => x !== "all").length} onClear={() => (setQ(""), setCountry("all"), setCat("all"), setStatus("all"))}>
             <SearchInput value={q} onChange={setQ} placeholder="Search visa types…" />
             <FilterGrid>

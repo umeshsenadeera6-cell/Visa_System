@@ -56,18 +56,18 @@ export default function Login() {
       {/* Left: visual */}
       <aside className="relative hidden overflow-hidden bg-forest lg:flex lg:flex-col">
         <div className="absolute inset-0 bg-grid opacity-60" />
-        <div className="absolute -top-40 -left-40 size-[520px] rounded-full bg-[#14815d] opacity-40 blur-[120px]" />
-        <div className="absolute right-[-120px] bottom-[-120px] size-[420px] rounded-full bg-[#c9a14a] opacity-20 blur-[120px]" />
-        <div className="relative z-10 flex items-center p-10">
+        <div className="absolute -top-40 -left-40 size-[520px] rounded-full bg-[#14815d] opacity-40 blur-[120px] animate-aurora" />
+        <div className="absolute right-[-120px] bottom-[-120px] size-[420px] rounded-full bg-[#c9a14a] opacity-25 blur-[120px] animate-pulse-glow" />
+        <div className="relative z-10 flex items-center p-10 animate-fade-down">
           <Logo light />
         </div>
         <div className="relative z-10 flex flex-1 items-center justify-center px-10">
           <TravelArt className="w-full max-w-[520px] animate-float drop-shadow-2xl" />
         </div>
-        <div className="relative z-10 p-10 pt-0">
+        <div className="relative z-10 p-10 pt-0 animate-fade-up">
           <blockquote className="max-w-md">
             <p className="font-display text-2xl leading-snug font-semibold text-white">"Every approved visa starts with an organised file."</p>
-            <p className="mt-3 text-sm text-white/60">Manage visa details and download document checklists as PDF.</p>
+            <p className="mt-3 text-sm text-white/70">Manage visa details and download document checklists as PDF.</p>
           </blockquote>
           <div className="mt-8 flex gap-8 text-white">
             {[
@@ -75,9 +75,9 @@ export default function Login() {
               ["92%", "Approval rate"],
               ["7", "Destinations"],
             ].map(([v, l]) => (
-              <div key={l}>
+              <div key={l} className="transition-transform duration-200 hover:scale-105">
                 <p className="font-display text-2xl font-bold text-[#e2c47c]">{v}</p>
-                <p className="text-xs text-white/55">{l}</p>
+                <p className="text-xs text-white/60">{l}</p>
               </div>
             ))}
           </div>
@@ -86,58 +86,60 @@ export default function Login() {
 
       {/* Right: form */}
       <main className="flex flex-col bg-background">
-        <div className="flex items-center p-5 lg:hidden">
+        <div className="flex items-center p-5 lg:hidden animate-fade-down">
           <Logo />
         </div>
         <div className="flex flex-1 items-center justify-center px-5 py-8 sm:px-10">
           <div className="w-full max-w-[440px] page-enter">
-            <div className="mb-8 hidden lg:block">
+            <div className="mb-8 hidden lg:block animate-fade-down">
               <Logo />
             </div>
-            <h1 className="text-[28px] font-bold">Welcome Back</h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage visa details or browse the visa guide</p>
+            <div className="animate-fade-up stagger-1">
+              <h1 className="text-[28px] font-bold tracking-tight">Welcome Back</h1>
+              <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage visa details or browse the visa guide</p>
+            </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4 animate-fade-up stagger-2" noValidate>
               <Field label="Email" error={e.email?.message} htmlFor="email">
-                <div className="relative">
+                <div className="relative transition-all">
                   <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="email" type="email" autoComplete="email" className="h-11 pl-10" {...register("email", { required: "Email is required", ...emailRule })} aria-invalid={!!e.email} />
+                  <Input id="email" type="email" autoComplete="email" className="h-11 pl-10 transition-shadow focus-visible:ring-primary/40" {...register("email", { required: "Email is required", ...emailRule })} aria-invalid={!!e.email} />
                 </div>
               </Field>
               <Field label="Password" error={e.password?.message} htmlFor="password">
-                <div className="relative">
+                <div className="relative transition-all">
                   <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPw ? "text" : "password"}
                     autoComplete="current-password"
-                    className="h-11 pr-10 pl-10"
+                    className="h-11 pr-10 pl-10 transition-shadow focus-visible:ring-primary/40"
                     {...register("password", { required: "Password is required", minLength: { value: 4, message: "Use at least 4 characters" } })}
                     aria-invalid={!!e.password}
                   />
-                  <button type="button" onClick={() => setShowPw((s) => !s)} className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground" aria-label={showPw ? "Hide password" : "Show password"}>
+                  <button type="button" onClick={() => setShowPw((s) => !s)} className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors" aria-label={showPw ? "Hide password" : "Show password"}>
                     {showPw ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
               </Field>
               <div className="flex items-center justify-between">
-                <Label className="font-normal text-muted-foreground">
+                <Label className="font-normal text-muted-foreground cursor-pointer">
                   <Checkbox defaultChecked /> Remember me
                 </Label>
               </div>
-              <Button type="submit" size="lg" className="w-full" disabled={!!loading}>
+              <Button type="submit" size="lg" className="w-full shimmer-sweep hover:shadow-lg transition-all duration-300" disabled={!!loading}>
                 {loading && loading !== "demo" ? <Loader2 className="animate-spin" /> : null}
-                Login <ArrowRight />
+                Login <ArrowRight className="transition-transform duration-200 group-hover:translate-x-1" />
               </Button>
             </form>
 
-            <div className="my-7 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="my-7 flex items-center gap-3 text-xs text-muted-foreground animate-fade-up stagger-3">
               <div className="h-px flex-1 bg-border" />
               or use a demo account
               <div className="h-px flex-1 bg-border" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 animate-fade-up stagger-4">
               {DEMO_ROLES.map((r) => {
                 const Icon = roleIcons[r.role] ?? Crown;
                 return (
@@ -146,11 +148,12 @@ export default function Login() {
                     onClick={() => enter(r.role)}
                     disabled={!!loading}
                     className={cn(
-                      "group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)] disabled:opacity-60",
-                      r.role === "Admin" && "border-primary/30 bg-[#f4faf7]",
+                      "group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-4 text-left transition-all duration-300 hover-lift hover:border-primary/40 disabled:opacity-60",
+                      r.role === "Admin" && "border-primary/30 bg-[#f4faf7] hover:bg-[#ebf7f2]",
+                      r.role === "Customer" && "hover:bg-[#fffdf7]",
                     )}
                   >
-                    <span className={cn("flex size-10 items-center justify-center rounded-xl transition", r.role === "Customer" ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
+                    <span className={cn("flex size-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110", r.role === "Customer" ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
                       {loading === r.role ? <Loader2 className="size-5 animate-spin" /> : <Icon className="size-5" />}
                     </span>
                     <span>
@@ -163,7 +166,7 @@ export default function Login() {
             </div>
 
             {/* Role descriptions */}
-            <div className="mt-5 rounded-xl border border-border bg-muted/40 p-4 space-y-2">
+            <div className="mt-5 rounded-xl border border-border bg-muted/40 p-4 space-y-2 animate-fade-up stagger-5">
               <div className="flex items-start gap-2.5">
                 <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-[#e7f4ee]">
                   <Crown className="size-4 text-primary" />
@@ -184,7 +187,7 @@ export default function Login() {
               </div>
             </div>
 
-            <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+            <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground animate-fade-up stagger-6">
               <ShieldCheck className="size-3.5 text-primary" /> Frontend demo — no real authentication or data is sent.
             </p>
           </div>
