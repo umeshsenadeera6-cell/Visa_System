@@ -8,6 +8,22 @@ interface PdfRequirementsOptions {
   agencyName?: string;
 }
 
+function cleanPdfText(str?: string | null): string {
+  if (!str) return "";
+  return str
+    // Remove surrogate pairs (emojis like flags)
+    .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "")
+    // Remove miscellaneous symbols & pictographs
+    .replace(/[\u2600-\u27BF]/g, "")
+    // Replace smart quotes and special dashes/dots with standard ASCII
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/[\u00B7\u2022]/g, "|")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function downloadRequirementsPDF({ visaType, country, requirements, agencyName = "Serendib Visa Services" }: PdfRequirementsOptions) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
@@ -41,16 +57,31 @@ export function downloadRequirementsPDF({ visaType, country, requirements, agenc
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   rgb("#a6d9c0");
-  doc.text(agencyName.toUpperCase(), MARGIN, 14);
+  doc.text(cleanPdfText(agencyName).toUpperCase(), MARGIN, 14);
+
+  // Country Code badge in header
+  const countryCode = cleanPdfText(country.code).toUpperCase();
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  const badgeW = doc.getTextWidth(countryCode) + 8;
+  const badgeH = 6;
+  fill("#144a33");
+  stroke("#2d7d59");
+  doc.roundedRect(PAGE_W - MARGIN - badgeW, 10, badgeW, badgeH, 1.5, 1.5, "FD");
+  rgb("#d4ede1");
+  doc.text(countryCode, PAGE_W - MARGIN - badgeW + 4, 14.2);
 
   // Visa title
-  doc.setFontSize(20);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
   rgb("#ffffff");
-  doc.text(`${country.flag ?? ""} ${visaType.category} Visa`, MARGIN, 28, { maxWidth: CONTENT_W - 20 });
+  const mainTitle = `${cleanPdfText(country.name)} - ${cleanPdfText(visaType.category)} Visa`;
+  doc.text(mainTitle, MARGIN, 27, { maxWidth: CONTENT_W - badgeW - 10 });
 
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   rgb("#c7e8d8");
-  doc.text(`${country.name} · ${visaType.name}`, MARGIN, 37);
+  doc.text(`${cleanPdfText(visaType.name)} | Document Checklist`, MARGIN, 36);
 
   // ── META CHIPS ────────────────────────────────────────────
   y = 52;
@@ -155,23 +186,24 @@ export function downloadRequirementsPDF({ visaType, country, requirements, agenc
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
       rgb("#1a3d2b");
-      doc.text(`${i + 1}. ${r.name}`, MARGIN + 11, y + (r.note ? 5 : rowH / 2 + 1.5));
+      doc.text(`${i + 1}. ${cleanPdfText(r.name)}`, MARGIN + 11, y + (r.note ? 5 : rowH / 2 + 1.5));
 
       // Category badge
-      const catW = doc.getTextWidth(r.category) + 6;
+      const cleanCat = cleanPdfText(r.category);
+      const catW = doc.getTextWidth(cleanCat) + 6;
       fill("#ddeee6");
       doc.roundedRect(PAGE_W - MARGIN - catW - 1, y + 1.5, catW, 5, 1, 1, "F");
       doc.setFont("helvetica", "normal");
       doc.setFontSize(6);
       rgb("#1a5c40");
-      doc.text(r.category, PAGE_W - MARGIN - catW + 2, y + 5);
+      doc.text(cleanCat, PAGE_W - MARGIN - catW + 2, y + 5);
 
       // Note
       if (r.note) {
         doc.setFont("helvetica", "italic");
         doc.setFontSize(7);
         rgb("#6b8f80");
-        doc.text(r.note, MARGIN + 11, y + 9);
+        doc.text(cleanPdfText(r.note), MARGIN + 11, y + 9);
       }
 
       y += rowH + 1;
@@ -189,7 +221,7 @@ export function downloadRequirementsPDF({ visaType, country, requirements, agenc
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7);
     rgb("#7a9a8a");
-    doc.text(agencyName, MARGIN, PAGE_H - 5);
+    doc.text(cleanPdfText(agencyName), MARGIN, PAGE_H - 5);
     doc.text(`Generated: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`, PAGE_W / 2, PAGE_H - 5, { align: "center" });
     doc.text(`Page ${p} of ${totalPages}`, PAGE_W - MARGIN, PAGE_H - 5, { align: "right" });
   }
