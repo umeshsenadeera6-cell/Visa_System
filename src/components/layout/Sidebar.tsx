@@ -114,7 +114,7 @@ export function SidebarContent({ collapsed = false, onNavigate, onToggle }: { co
                 <>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-semibold text-white">{store.session?.name}</p>
-                    <p className="truncate text-[11.5px] text-white/50">{role === "Admin" ? "Visa Officer" : role}</p>
+                    <p className="truncate text-[11.5px] text-white/50">{role === "Admin" ? "Visa Officer" : (role === "Customer" ? "Team Member" : role)}</p>
                   </div>
                   <ChevronsUpDown className="size-4 text-white/40" />
                 </>

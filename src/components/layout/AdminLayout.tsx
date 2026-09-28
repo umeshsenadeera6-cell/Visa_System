@@ -38,7 +38,7 @@ export function AdminLayout() {
   }, [location.pathname]);
 
   if (!store.session) return <Navigate to="/login" replace />;
-  if (store.session.role === "Customer") return <Navigate to="/portal" replace />;
+  if (store.session.role === "Team Member" || store.session.role === "Customer") return <Navigate to="/portal" replace />;
   const allowed = canAccess(store.session.role, location.pathname);
 
   return (

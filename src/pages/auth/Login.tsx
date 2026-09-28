@@ -17,6 +17,7 @@ import type { Role } from "@/data/types";
 
 const roleIcons: Partial<Record<Role, typeof Crown>> = {
   Admin: Crown,
+  "Team Member": UserRound,
   Customer: UserRound,
 };
 
@@ -31,24 +32,24 @@ export default function Login() {
   const e = formState.errors;
 
   const enter = (role: Role, email?: string) => {
-    const r = DEMO_ROLES.find((x) => x.role === role)!;
+    const r = DEMO_ROLES.find((x) => x.role === role) ?? DEMO_ROLES[0];
     setLoading(role);
     setTimeout(() => {
-      if (role === "Customer") {
+      if (role === "Team Member" || role === "Customer") {
         const c = store.customers.find((x) => x.id === r.customerId) ?? store.customers[0];
-        store.signIn({ role, customerId: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email });
+        store.signIn({ role: "Team Member", customerId: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email });
         navigate("/portal/visa-guide");
       } else {
         store.signIn({ role, staffId: r.staffId, name: r.name, email: email ?? r.email });
         navigate("/app/visa-types");
       }
-      toast.success(`Welcome back, ${r.name.split(" ")[0]}!`, { description: `Signed in as ${role}.` });
+      toast.success(`Welcome back, ${r.name.split(" ")[0]}!`, { description: `Signed in as ${role === "Customer" ? "Team Member" : role}.` });
     }, 650);
   };
 
   const onSubmit = (v: { email: string }) => {
     const isCustomer = !v.email.toLowerCase().includes("serendibvisa");
-    enter(isCustomer ? "Customer" : "Admin", v.email);
+    enter(isCustomer ? "Team Member" : "Admin", v.email);
   };
 
   return (
@@ -141,7 +142,8 @@ export default function Login() {
 
             <div className="grid grid-cols-2 gap-3 animate-fade-up stagger-4">
               {DEMO_ROLES.map((r) => {
-                const Icon = roleIcons[r.role] ?? Crown;
+                const Icon = roleIcons[r.role] ?? UserRound;
+                const isTeamMember = r.role === "Team Member" || r.role === "Customer";
                 return (
                   <button
                     key={r.role}
@@ -150,14 +152,14 @@ export default function Login() {
                     className={cn(
                       "group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-4 text-left transition-all duration-300 hover-lift hover:border-primary/40 disabled:opacity-60",
                       r.role === "Admin" && "border-primary/30 bg-[#f4faf7] hover:bg-[#ebf7f2]",
-                      r.role === "Customer" && "hover:bg-[#fffdf7]",
+                      isTeamMember && "hover:bg-[#fffdf7]",
                     )}
                   >
-                    <span className={cn("flex size-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110", r.role === "Customer" ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
+                    <span className={cn("flex size-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110", isTeamMember ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
                       {loading === r.role ? <Loader2 className="size-5 animate-spin" /> : <Icon className="size-5" />}
                     </span>
                     <span>
-                      <span className="block text-[14px] leading-tight font-semibold">{r.role === "Admin" ? "Visa Officer" : "Customer"}</span>
+                      <span className="block text-[14px] leading-tight font-semibold">{r.role === "Admin" ? "Visa Officer" : "Team Member"}</span>
                       <span className="mt-1 block text-[12px] text-muted-foreground">{r.description}</span>
                     </span>
                   </button>
@@ -181,7 +183,7 @@ export default function Login() {
                   <BookOpen className="size-4 text-[#8a6412]" />
                 </div>
                 <div>
-                  <p className="text-[13px] font-semibold">Customer</p>
+                  <p className="text-[13px] font-semibold">Team Member</p>
                   <p className="text-[12px] text-muted-foreground">Browse the visa guide and download document checklist PDFs</p>
                 </div>
               </div>

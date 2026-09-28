@@ -1,4 +1,4 @@
-export type Role = "Admin" | "Manager" | "Visa Consultant" | "Documentation Officer" | "Finance Officer" | "Customer";
+export type Role = "Admin" | "Manager" | "Visa Consultant" | "Documentation Officer" | "Finance Officer" | "Team Member" | "Customer";
 export type StaffRole = "Admin" | "Manager" | "Visa Consultant" | "Documentation Officer" | "Finance Officer" | "Receptionist";
 export type Priority = "Low" | "Medium" | "High" | "Urgent";
 

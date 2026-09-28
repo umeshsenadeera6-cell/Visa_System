@@ -25,7 +25,7 @@ export function PortalLayout() {
   useEffect(() => window.scrollTo({ top: 0 }), [location.pathname]);
 
   if (!store.session) return <Navigate to="/login" replace />;
-  if (store.session.role !== "Customer") return <Navigate to="/app" replace />;
+  if (store.session.role !== "Team Member" && store.session.role !== "Customer") return <Navigate to="/app" replace />;
   const c = store.customers.find((x) => x.id === store.session?.customerId);
 
   return (
@@ -34,7 +34,7 @@ export function PortalLayout() {
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
           <NavLink to="/portal/visa-guide" className="flex items-center gap-3">
             <Logo />
-            <span className="hidden rounded-full bg-gold-soft px-2 py-0.5 text-[10.5px] font-semibold tracking-wide text-[#8a6412] uppercase sm:inline">Client Portal</span>
+            <span className="hidden rounded-full bg-gold-soft px-2 py-0.5 text-[10.5px] font-semibold tracking-wide text-[#8a6412] uppercase sm:inline">Team Member Portal</span>
           </NavLink>
           <div className="ml-auto flex items-center gap-1">
             <DropdownMenu>

@@ -10,11 +10,11 @@ export function useSwitchRole() {
   const navigate = useNavigate();
   return (role: (typeof DEMO_ROLES)[number]["role"], customerId?: string) => {
     const r = DEMO_ROLES.find((x) => x.role === role)!;
-    if (role === "Customer") {
+    if (role === "Team Member" || role === "Customer") {
       const c = store.customers.find((x) => x.id === (customerId ?? r.customerId)) ?? store.customers[0];
-      store.signIn({ role, customerId: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email });
+      store.signIn({ role: "Team Member", customerId: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email });
       navigate("/portal");
-      toast.success(`Viewing customer portal as ${c.firstName} ${c.lastName}`);
+      toast.success(`Viewing portal as ${c.firstName} ${c.lastName}`);
     } else {
       store.signIn({ role, staffId: r.staffId, name: r.name, email: r.email });
       navigate("/app");

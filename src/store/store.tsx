@@ -160,7 +160,7 @@ function useStoreValue() {
     }
   }, [session]);
 
-  const actor = () => sessionRef.current?.staffId ?? (sessionRef.current?.role === "Customer" ? "customer" : "STF-01");
+  const actor = () => sessionRef.current?.staffId ?? (sessionRef.current?.role === "Customer" || sessionRef.current?.role === "Team Member" ? "customer" : "STF-01");
 
   /* generic CRUD ------------------------------------------------------- */
   const add = useCallback(<K extends CollectionKey>(key: K, item: ItemOf<K>) => {
