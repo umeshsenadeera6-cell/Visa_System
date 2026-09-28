@@ -67,7 +67,7 @@ export default function Login() {
         <div className="relative z-10 p-10 pt-0">
           <blockquote className="max-w-md">
             <p className="font-display text-2xl leading-snug font-semibold text-white">"Every approved visa starts with an organised file."</p>
-            <p className="mt-3 text-sm text-white/60">Visa details manage කරන්න, document checklist PDF download කරන්න.</p>
+            <p className="mt-3 text-sm text-white/60">Manage visa details and download document checklists as PDF.</p>
           </blockquote>
           <div className="mt-8 flex gap-8 text-white">
             {[
@@ -95,7 +95,7 @@ export default function Login() {
               <Logo />
             </div>
             <h1 className="text-[28px] font-bold">Welcome Back</h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage visa details or view the visa guide</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage visa details or browse the visa guide</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
               <Field label="Email" error={e.email?.message} htmlFor="email">
@@ -170,7 +170,7 @@ export default function Login() {
                 </div>
                 <div>
                   <p className="text-[13px] font-semibold">Visa Officer (Admin)</p>
-                  <p className="text-[12px] text-muted-foreground">Visa types add/edit කරන්න, required documents list manage කරන්න</p>
+                  <p className="text-[12px] text-muted-foreground">Add, edit and manage visa types & required document checklists</p>
                 </div>
               </div>
               <div className="flex items-start gap-2.5">
@@ -179,7 +179,7 @@ export default function Login() {
                 </div>
                 <div>
                   <p className="text-[13px] font-semibold">Customer</p>
-                  <p className="text-[12px] text-muted-foreground">Visa guide බලන්න, documents checklist PDF download කරන්න</p>
+                  <p className="text-[12px] text-muted-foreground">Browse the visa guide and download document checklist PDFs</p>
                 </div>
               </div>
             </div>

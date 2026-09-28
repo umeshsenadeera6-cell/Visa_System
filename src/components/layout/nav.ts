@@ -30,8 +30,8 @@ export const NAV: NavGroup[] = [
 ];
 
 export const DEMO_ROLES: { role: Role; staffId?: string; customerId?: string; name: string; email: string; description: string }[] = [
-  { role: "Admin", staffId: "STF-01", name: "Ruwan Jayasinghe", email: "ruwan@serendibvisa.lk", description: "Visa details manage කිරීමට" },
-  { role: "Customer", customerId: "CUS-1001", name: "John Perera", email: "john.perera@gmail.com", description: "Visa guide බැලීමට" },
+  { role: "Admin", staffId: "STF-01", name: "Ruwan Jayasinghe", email: "ruwan@serendibvisa.lk", description: "Manage visa types & document requirements" },
+  { role: "Customer", customerId: "CUS-1001", name: "John Perera", email: "john.perera@gmail.com", description: "Browse visa guide & download checklists" },
 ];
 
 export const canAccess = (role: Role, path: string) => {
