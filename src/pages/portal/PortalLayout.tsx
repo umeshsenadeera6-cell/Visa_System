@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
 import { Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CalendarDays, CreditCard, FileText, Home, LogOut, MessageSquare, Plane, Receipt, Repeat, Search, UserRound } from "lucide-react";
+import { CalendarDays, CreditCard, FileText, Home, LogOut, MessageSquare, Plane, Receipt, Repeat, Search, UserRound, BookOpen } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +24,10 @@ const NAV = [
   { to: "/portal/invoices", label: "Invoices", icon: Receipt },
   { to: "/portal/appointments", label: "Appointments", icon: CalendarDays },
   { to: "/portal/messages", label: "Messages", icon: MessageSquare },
+  { to: "/portal/visa-guide", label: "Visa Guide", icon: BookOpen },
   { to: "/portal/profile", label: "Profile", icon: UserRound },
 ];
-const MOBILE = [NAV[0], NAV[1], NAV[2], NAV[6], NAV[7]];
+const MOBILE = [NAV[0], NAV[1], NAV[2], NAV[6], NAV[8]];
 
 export function PortalLayout() {
   const store = useStore();

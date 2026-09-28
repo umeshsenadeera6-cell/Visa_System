@@ -40,6 +40,7 @@ const PortalInvoices = lazy(() => import("@/pages/portal/PortalInvoices"));
 const PortalAppointments = lazy(() => import("@/pages/portal/PortalAppointments"));
 const PortalMessages = lazy(() => import("@/pages/portal/PortalMessages"));
 const PortalProfile = lazy(() => import("@/pages/portal/PortalProfile"));
+const PortalVisaGuide = lazy(() => import("@/pages/portal/PortalVisaGuide"));
 
 
 // Hash routing can be enabled for static hosting without rewrite rules: VITE_HASH_ROUTER=true
@@ -96,6 +97,7 @@ export default function App() {
                     <Route path="appointments" element={<PortalAppointments />} />
                     <Route path="messages" element={<PortalMessages />} />
                     <Route path="profile" element={<PortalProfile />} />
+                    <Route path="visa-guide" element={<PortalVisaGuide />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
