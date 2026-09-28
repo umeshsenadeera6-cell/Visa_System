@@ -1,23 +1,13 @@
 import { Suspense, useEffect, useState } from "react";
-import { Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CalendarPlus, ChevronsRight, FilePlus2, LayoutDashboard, Menu, MoreHorizontal, Plane, Plus, Search, UploadCloud, UserPlus, Users, CreditCard, ShieldAlert } from "lucide-react";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ChevronsRight, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { useModals } from "@/components/modals/context";
+import { ShieldAlert } from "lucide-react";
 import { useStore } from "@/store/store";
 import { cn } from "@/lib/utils";
 import { SidebarContent } from "./Sidebar";
-import { CommandPalette } from "./CommandPalette";
-import { NotificationCenter } from "./NotificationCenter";
 import { canAccess } from "./nav";
 
 function readCollapsed() {
@@ -32,10 +22,8 @@ export function AdminLayout() {
   const store = useStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const modals = useModals();
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -90,52 +78,7 @@ export function AdminLayout() {
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open menu">
               <Menu className="size-5" />
             </Button>
-
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="group flex h-10 flex-1 items-center gap-2.5 rounded-xl border border-border bg-[#f7f9f8] px-3 text-sm text-muted-foreground transition hover:border-[#cfd8d3] hover:bg-white sm:max-w-md"
-              aria-label="Open global search"
-            >
-              <Search className="size-4" />
-              <span className="flex-1 truncate text-left">
-                <span className="sm:hidden">Search…</span>
-                <span className="hidden sm:inline">Search customers, applications, invoices…</span>
-              </span>
-              <kbd className="hidden items-center gap-0.5 rounded-md border border-border bg-white px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground shadow-xs sm:inline-flex">⌘ K</kbd>
-            </button>
-
-            <div className="ml-auto flex items-center gap-1 sm:gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="hidden rounded-xl sm:inline-flex">
-                    <Plus /> Create
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Quick create</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => modals.open("application")}>
-                    <FilePlus2 /> New application
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => modals.open("lead")}>
-                    <UserPlus /> Add lead
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => modals.open("customer")}>
-                    <Users /> Add customer
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => modals.open("upload")}>
-                    <UploadCloud /> Upload document
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => modals.open("payment")}>
-                    <CreditCard /> Add payment
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => modals.open("appointment")}>
-                    <CalendarPlus /> Schedule appointment
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <NotificationCenter />
-            </div>
+            <div className="flex-1" />
           </div>
         </header>
 
@@ -149,55 +92,14 @@ export function AdminLayout() {
               <EmptyState
                 icon={ShieldAlert}
                 title="You don't have access to this page"
-                description={`The ${store.session.role} role can't open this module. Switch demo role from the profile menu to explore it.`}
-                action={<Button onClick={() => navigate("/app")}>Back to dashboard</Button>}
+                description={`The ${store.session.role} role can't open this module.`}
+                action={<Button onClick={() => navigate("/app/visa-types")}>Go to Visa Types</Button>}
               />
             )}
           </div>
         </main>
       </div>
-
-      {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-white/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden" aria-label="Bottom">
-        <div className="relative mx-auto grid max-w-md grid-cols-5 items-end px-2">
-          {[
-            { to: "/app", label: "Home", icon: LayoutDashboard },
-            { to: "/app/applications", label: "Visas", icon: Plane },
-          ].map((i) => (
-            <BottomLink key={i.to} {...i} />
-          ))}
-          <div className="flex justify-center">
-            <button
-              onClick={() => modals.open("application")}
-              className="-mt-5 flex size-13 items-center justify-center rounded-2xl bg-gradient-to-b from-[#0f7a5a] to-[#0b5a42] text-white shadow-lg shadow-primary/30 transition active:scale-95"
-              aria-label="New application"
-            >
-              <Plus className="size-6" />
-            </button>
-          </div>
-          <BottomLink to="/app/customers" label="Customers" icon={Users} />
-          <button onClick={() => setMobileOpen(true)} className="flex flex-col items-center gap-1 py-2.5 text-[10.5px] font-medium text-muted-foreground">
-            <MoreHorizontal className="size-5" />
-            More
-          </button>
-        </div>
-      </nav>
-
-      <CommandPalette open={searchOpen} onOpenChange={setSearchOpen} />
     </div>
-  );
-}
-
-function BottomLink({ to, label, icon: Icon }: { to: string; label: string; icon: typeof Plus }) {
-  return (
-    <NavLink
-      to={to}
-      end={to === "/app"}
-      className={({ isActive }) => cn("flex flex-col items-center gap-1 py-2.5 text-[10.5px] font-medium transition", isActive ? "text-primary" : "text-muted-foreground")}
-    >
-      <Icon className="size-5" />
-      {label}
-    </NavLink>
   );
 }
 

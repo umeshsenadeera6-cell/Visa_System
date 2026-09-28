@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { ChevronsLeft, ChevronsUpDown, ExternalLink, LogOut, MonitorSmartphone, UserRound } from "lucide-react";
+import { ChevronsLeft, ChevronsUpDown, LogOut, UserRound } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -15,14 +15,12 @@ import { useStore } from "@/store/store";
 import { cn } from "@/lib/utils";
 import { NAV } from "./nav";
 import { useNavBadges } from "./useNavBadges";
-import { RoleSwitcherSub } from "./RoleSwitcher";
 
 export function SidebarContent({ collapsed = false, onNavigate, onToggle }: { collapsed?: boolean; onNavigate?: () => void; onToggle?: () => void }) {
   const store = useStore();
   const navigate = useNavigate();
   const badges = useNavBadges();
   const role = store.session?.role ?? "Admin";
-  const staff = store.staff.find((s) => s.id === store.session?.staffId);
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground">
@@ -102,22 +100,6 @@ export function SidebarContent({ collapsed = false, onNavigate, onToggle }: { co
         })}
       </nav>
 
-      {!collapsed && (
-        <div className="relative mx-3 mb-3 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-3.5">
-          <p className="text-[12.5px] font-semibold text-white">Customer portal</p>
-          <p className="mt-0.5 text-[11.5px] leading-relaxed text-white/55">Preview what customers see when they track their visa.</p>
-          <button
-            onClick={() => {
-              onNavigate?.();
-              navigate("/track");
-            }}
-            className="mt-2.5 inline-flex items-center gap-1 text-[12px] font-semibold text-[#e2c47c] transition hover:text-[#f0d894]"
-          >
-            Open tracking page <ExternalLink className="size-3" />
-          </button>
-        </div>
-      )}
-
       <div className="relative border-t border-white/10 p-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -132,7 +114,7 @@ export function SidebarContent({ collapsed = false, onNavigate, onToggle }: { co
                 <>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-semibold text-white">{store.session?.name}</p>
-                    <p className="truncate text-[11.5px] text-white/50">{role === "Admin" ? "Administrator" : role}</p>
+                    <p className="truncate text-[11.5px] text-white/50">{role === "Admin" ? "Visa Officer" : role}</p>
                   </div>
                   <ChevronsUpDown className="size-4 text-white/40" />
                 </>
@@ -143,20 +125,12 @@ export function SidebarContent({ collapsed = false, onNavigate, onToggle }: { co
             <DropdownMenuLabel className="font-normal">
               <p className="text-sm font-semibold text-foreground">{store.session?.name}</p>
               <p className="text-xs">{store.session?.email}</p>
-              {staff && <p className="mt-0.5 text-xs">{staff.branch} branch</p>}
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => (onNavigate?.(), navigate("/app/settings"))}>
-              <UserRound /> My profile & settings
-            </DropdownMenuItem>
-            <RoleSwitcherSub />
-            <DropdownMenuItem onClick={() => (onNavigate?.(), navigate("/"))}>
-              <MonitorSmartphone /> View public website
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
               onClick={() => {
+                onNavigate?.();
                 store.signOut();
                 navigate("/login");
               }}

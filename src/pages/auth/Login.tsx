@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ArrowRight, Briefcase, Eye, EyeOff, FileCheck2, Loader2, Lock, Mail, ShieldCheck, UserCog, UserRound, Wallet, Crown } from "lucide-react";
+import { ArrowRight, BookOpen, Crown, Eye, EyeOff, Loader2, Lock, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,12 +15,8 @@ import { useStore } from "@/store/store";
 import { cn } from "@/lib/utils";
 import type { Role } from "@/data/types";
 
-const roleIcons: Record<Role, typeof Crown> = {
+const roleIcons: Partial<Record<Role, typeof Crown>> = {
   Admin: Crown,
-  Manager: UserCog,
-  "Visa Consultant": Briefcase,
-  "Documentation Officer": FileCheck2,
-  "Finance Officer": Wallet,
   Customer: UserRound,
 };
 
@@ -41,12 +37,12 @@ export default function Login() {
       if (role === "Customer") {
         const c = store.customers.find((x) => x.id === r.customerId) ?? store.customers[0];
         store.signIn({ role, customerId: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email });
-        navigate("/portal");
+        navigate("/portal/visa-guide");
       } else {
         store.signIn({ role, staffId: r.staffId, name: r.name, email: email ?? r.email });
-        navigate("/app");
+        navigate("/app/visa-types");
       }
-      toast.success(`Welcome back, ${r.name.split(" ")[0]}!`, { description: `Signed in as ${role} (demo).` });
+      toast.success(`Welcome back, ${r.name.split(" ")[0]}!`, { description: `Signed in as ${role}.` });
     }, 650);
   };
 
@@ -70,8 +66,8 @@ export default function Login() {
         </div>
         <div className="relative z-10 p-10 pt-0">
           <blockquote className="max-w-md">
-            <p className="font-display text-2xl leading-snug font-semibold text-white">“Every approved visa starts with an organised file.”</p>
-            <p className="mt-3 text-sm text-white/60">Manage leads, documents, payments and embassy timelines — in one calm workspace.</p>
+            <p className="font-display text-2xl leading-snug font-semibold text-white">"Every approved visa starts with an organised file."</p>
+            <p className="mt-3 text-sm text-white/60">Visa details manage කරන්න, document checklist PDF download කරන්න.</p>
           </blockquote>
           <div className="mt-8 flex gap-8 text-white">
             {[
@@ -99,7 +95,7 @@ export default function Login() {
               <Logo />
             </div>
             <h1 className="text-[28px] font-bold">Welcome Back</h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage your visa applications</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">Sign in to manage visa details or view the visa guide</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
               <Field label="Email" error={e.email?.message} htmlFor="email">
@@ -128,9 +124,6 @@ export default function Login() {
                 <Label className="font-normal text-muted-foreground">
                   <Checkbox defaultChecked /> Remember me
                 </Label>
-                <button type="button" onClick={() => toast.info("Password reset emails will be available after backend integration.")} className="text-sm font-medium text-primary hover:underline">
-                  Forgot password?
-                </button>
               </div>
               <Button type="submit" size="lg" className="w-full" disabled={!!loading}>
                 {loading && loading !== "demo" ? <Loader2 className="animate-spin" /> : null}
@@ -140,36 +133,58 @@ export default function Login() {
 
             <div className="my-7 flex items-center gap-3 text-xs text-muted-foreground">
               <div className="h-px flex-1 bg-border" />
-              or explore with a demo account
+              or use a demo account
               <div className="h-px flex-1 bg-border" />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3">
               {DEMO_ROLES.map((r) => {
-                const Icon = roleIcons[r.role];
+                const Icon = roleIcons[r.role] ?? Crown;
                 return (
                   <button
                     key={r.role}
                     onClick={() => enter(r.role)}
                     disabled={!!loading}
                     className={cn(
-                      "group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)] disabled:opacity-60",
+                      "group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)] disabled:opacity-60",
                       r.role === "Admin" && "border-primary/30 bg-[#f4faf7]",
                     )}
                   >
-                    <span className={cn("flex size-8 items-center justify-center rounded-lg transition", r.role === "Customer" ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
-                      {loading === r.role ? <Loader2 className="size-4 animate-spin" /> : <Icon className="size-4" />}
+                    <span className={cn("flex size-10 items-center justify-center rounded-xl transition", r.role === "Customer" ? "bg-gold-soft text-[#8a6412]" : "bg-[#e7f4ee] text-primary")}>
+                      {loading === r.role ? <Loader2 className="size-5 animate-spin" /> : <Icon className="size-5" />}
                     </span>
                     <span>
-                      <span className="block text-[13px] leading-tight font-semibold">Demo {r.role === "Visa Consultant" ? "Consultant" : r.role === "Documentation Officer" ? "Docs Officer" : r.role}</span>
-                      <span className="mt-0.5 line-clamp-1 block text-[11px] text-muted-foreground">{r.name}</span>
+                      <span className="block text-[14px] leading-tight font-semibold">{r.role === "Admin" ? "Visa Officer" : "Customer"}</span>
+                      <span className="mt-1 block text-[12px] text-muted-foreground">{r.description}</span>
                     </span>
                   </button>
                 );
               })}
             </div>
 
-            <p className="mt-8 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+            {/* Role descriptions */}
+            <div className="mt-5 rounded-xl border border-border bg-muted/40 p-4 space-y-2">
+              <div className="flex items-start gap-2.5">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-[#e7f4ee]">
+                  <Crown className="size-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold">Visa Officer (Admin)</p>
+                  <p className="text-[12px] text-muted-foreground">Visa types add/edit කරන්න, required documents list manage කරන්න</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-gold-soft">
+                  <BookOpen className="size-4 text-[#8a6412]" />
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold">Customer</p>
+                  <p className="text-[12px] text-muted-foreground">Visa guide බලන්න, documents checklist PDF download කරන්න</p>
+                </div>
+              </div>
+            </div>
+
+            <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="size-3.5 text-primary" /> Frontend demo — no real authentication or data is sent.
             </p>
           </div>
