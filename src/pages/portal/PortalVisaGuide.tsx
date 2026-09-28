@@ -39,7 +39,7 @@ const LEVEL_BG = {
   Conditional: "bg-amber-50 border-amber-200",
 };
 
-function VisaCard({ vt, countryName, countryFlag }: { vt: VisaType; countryName: string; countryFlag: string }) {
+function VisaCard({ vt, countryFlag }: { vt: VisaType; countryFlag: string }) {
   const store = useStore();
   const [open, setOpen] = useState(false);
   const reqs = store.requirements[vt.id] ?? [];
@@ -337,7 +337,7 @@ export default function PortalVisaGuide() {
             </div>
             <div className="space-y-3">
               {types.map((vt) => (
-                <VisaCard key={vt.id} vt={vt} countryName={countryName} countryFlag={countryFlag} />
+                <VisaCard key={vt.id} vt={vt} countryFlag={countryFlag} />
               ))}
             </div>
           </section>
