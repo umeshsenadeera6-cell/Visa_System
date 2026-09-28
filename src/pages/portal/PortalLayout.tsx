@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
 import { Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, LogOut, UserRound } from "lucide-react";
+import { BookOpen, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

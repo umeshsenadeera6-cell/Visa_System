@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { ChevronsLeft, ChevronsUpDown, LogOut, UserRound } from "lucide-react";
+import { ChevronsLeft, ChevronsUpDown, LogOut } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
