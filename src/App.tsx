@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { StoreProvider } from "@/store/store";
@@ -7,7 +7,6 @@ import { ModalProvider } from "@/components/modals/ModalProvider";
 import { ConfirmProvider } from "@/components/shared/Confirm";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { PortalLayout } from "@/pages/portal/PortalLayout";
-import { PublicLayout } from "@/pages/public/PublicLayout";
 import Login from "@/pages/auth/Login";
 import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/admin/Dashboard";
@@ -42,15 +41,6 @@ const PortalAppointments = lazy(() => import("@/pages/portal/PortalAppointments"
 const PortalMessages = lazy(() => import("@/pages/portal/PortalMessages"));
 const PortalProfile = lazy(() => import("@/pages/portal/PortalProfile"));
 
-const Home = lazy(() => import("@/pages/public/Home"));
-const About = lazy(() => import("@/pages/public/About"));
-const Services = lazy(() => import("@/pages/public/Services"));
-const Destinations = lazy(() => import("@/pages/public/Destinations"));
-const PublicRequirements = lazy(() => import("@/pages/public/PublicRequirements"));
-const Eligibility = lazy(() => import("@/pages/public/Eligibility"));
-const Track = lazy(() => import("@/pages/public/Track"));
-const Faq = lazy(() => import("@/pages/public/Faq"));
-const Contact = lazy(() => import("@/pages/public/Contact"));
 
 // Hash routing can be enabled for static hosting without rewrite rules: VITE_HASH_ROUTER=true
 const Router = import.meta.env.VITE_HASH_ROUTER === "true" ? HashRouter : BrowserRouter;
@@ -72,17 +62,7 @@ export default function App() {
             <ModalProvider>
               <Suspense fallback={<PageFallback />}>
                 <Routes>
-                  <Route element={<PublicLayout />}>
-                    <Route index element={<Home />} />
-                    <Route path="about" element={<About />} />
-                    <Route path="services" element={<Services />} />
-                    <Route path="destinations" element={<Destinations />} />
-                    <Route path="visa-requirements" element={<PublicRequirements />} />
-                    <Route path="eligibility" element={<Eligibility />} />
-                    <Route path="track" element={<Track />} />
-                    <Route path="faq" element={<Faq />} />
-                    <Route path="contact" element={<Contact />} />
-                  </Route>
+                  <Route index element={<Navigate to="/login" replace />} />
                   <Route path="login" element={<Login />} />
                   <Route path="app" element={<AdminLayout />}>
                     <Route index element={<Dashboard />} />

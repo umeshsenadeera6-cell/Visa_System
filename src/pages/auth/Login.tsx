@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowRight, Briefcase, Eye, EyeOff, FileCheck2, Loader2, Lock, Mail, ShieldCheck, UserCog, UserRound, Wallet, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -62,13 +62,8 @@ export default function Login() {
         <div className="absolute inset-0 bg-grid opacity-60" />
         <div className="absolute -top-40 -left-40 size-[520px] rounded-full bg-[#14815d] opacity-40 blur-[120px]" />
         <div className="absolute right-[-120px] bottom-[-120px] size-[420px] rounded-full bg-[#c9a14a] opacity-20 blur-[120px]" />
-        <div className="relative z-10 flex items-center justify-between p-10">
-          <Link to="/">
-            <Logo light />
-          </Link>
-          <Link to="/track" className="text-sm text-white/70 transition hover:text-white">
-            Track an application →
-          </Link>
+        <div className="relative z-10 flex items-center p-10">
+          <Logo light />
         </div>
         <div className="relative z-10 flex flex-1 items-center justify-center px-10">
           <TravelArt className="w-full max-w-[520px] animate-float drop-shadow-2xl" />
@@ -95,10 +90,8 @@ export default function Login() {
 
       {/* Right: form */}
       <main className="flex flex-col bg-background">
-        <div className="flex items-center justify-between p-5 lg:hidden">
-          <Link to="/">
-            <Logo />
-          </Link>
+        <div className="flex items-center p-5 lg:hidden">
+          <Logo />
         </div>
         <div className="flex flex-1 items-center justify-center px-5 py-8 sm:px-10">
           <div className="w-full max-w-[440px] page-enter">
